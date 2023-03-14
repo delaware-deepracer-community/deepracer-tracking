@@ -36,7 +36,10 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+<<<<<<< HEAD
 log.txt
+=======
+>>>>>>> d0cdd1c57e3b5ada604167207c812c6d3bd28cf3
 
 # Unit test / coverage reports
 htmlcov/
