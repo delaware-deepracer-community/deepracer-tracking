@@ -130,7 +130,7 @@ class JPMCModels:
             print(ex)
 
     def filter_running_models_by_duration(self, duration):
-            """
+        """
         This method is for filtering all the models crossing duration threshold which are running
         """
         
