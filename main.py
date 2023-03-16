@@ -20,7 +20,7 @@ def get_dr_report():
 
 	jPMCModels.get_all_model_training_details_concurrent()
 	print("Done fetch")
-	# jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
+	jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
 	global sandbox_model_arns
 	sandbox_model_arns = jPMCModels.all_model_arns
 
