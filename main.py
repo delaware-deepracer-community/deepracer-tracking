@@ -25,7 +25,7 @@ def get_dr_report():
 	sandbox_model_arns = jPMCModels.all_model_arns
 
 schedule = BackgroundScheduler(daemon=False)
-schedule.add_job(get_dr_report, 'interval', seconds=120)
+schedule.add_job(get_dr_report, 'interval', seconds=900)
 schedule.start()
 
 # setting up schedule to update google ddns
