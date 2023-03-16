@@ -24,6 +24,8 @@ def get_dr_report():
 	global sandbox_model_arns
 	sandbox_model_arns = jPMCModels.all_model_arns
 
+# running the report as background process
+get_dr_report()
 schedule = BackgroundScheduler(daemon=False)
 schedule.add_job(get_dr_report, 'interval', seconds=900)
 schedule.start()
