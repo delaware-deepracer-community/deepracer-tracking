@@ -133,7 +133,7 @@ class JPMCModels:
             """
         This method is for filtering all the models crossing duration threshold which are running
         """
-
+        
         try:
             for k, v in self.all_model_arns.items():
                 if 'training_status' in v:
