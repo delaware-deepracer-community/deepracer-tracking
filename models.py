@@ -130,13 +130,24 @@ class JPMCModels:
             print(ex)
 
     def filter_running_models_by_duration(self, duration):
-        """
+            """
         This method is for filtering all the models crossing duration threshold which are running
         """
 
-        self.models_by_duration = {{k:v} for k, v in self.all_model_arns.items()
-                                   if ('training_status' in v and v['training_status'] == 'IN PROGRESS')
-                                    and ('max_training_time' in v and v['max_training_time'] > duration)}
+        try:
+            for k, v in self.all_model_arns.items():
+                if 'training_status' in v:
+                    if v['training_status'] == 'IN_PROGRESS':
+                        if 'max_training_time' in v:
+                            if v['max_training_time'] > duration:
+                                self.models_by_duration[k] = v
+                                
+            if self.models_by_duration != {}:
+                for k, v in self.models_by_duration.items():
+                    print(f"Model being stopped: {v['ModelName']}")
+                    self.stop_training_job(k)
+        except Exception as ex:
+            print(ex)    
     
     def stop_models_crossing_duration(self):
         """
