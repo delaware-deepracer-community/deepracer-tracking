@@ -17,6 +17,9 @@ RUN chown -R pyuser tracking
 # changing user
 USER pyuser
 
+# Changing working dir
+WORKDIR /home/pyuser/tracking
+
 # Install pip requirements
 RUN python -m pip install -r requirements.txt
 
