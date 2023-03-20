@@ -2,8 +2,6 @@ import logging
 from deepracer import boto3_enhancer
 import os
 
-print('test')
-
 DURATION_THRESHOLD = 180
 
 GOOGLE_DDNS = os.getenv('GOOGLE_DDNS')
