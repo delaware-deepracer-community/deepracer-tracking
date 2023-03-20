@@ -1,6 +1,9 @@
 # From deepracer utils base image
 FROM naveengh6/deepracer-utils:latest
 
+# Changing to root
+USER root
+
 # cd to user directory
 WORKDIR /home/pyuser
 
