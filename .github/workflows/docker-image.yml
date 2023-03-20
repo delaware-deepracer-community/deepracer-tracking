@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  release:
+    types: [created]
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Dockerhub login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASS: ${{secrets.DOCKER_PASS}}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag naveengh6/deepracer-tracking:${{ github.event.release.tag_name }} --tag naveengh6/deepracer-tracking:latest
+    - name: Docker push
+      run: docker push naveengh6/deepracer-tracking:${{ github.event.release.tag_name }}
+    - name: Docker push latest
+      run: docker push naveengh6/deepracer-tracking:latest
