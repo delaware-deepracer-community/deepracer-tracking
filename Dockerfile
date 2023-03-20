@@ -1,9 +1,6 @@
 # From deepracer utils base image
 FROM naveengh6/deepracer-utils:latest
 
-# changing user
-USER pyuser
-
 # cd to user directory
 WORKDIR /home/pyuser
 
@@ -13,6 +10,9 @@ RUN mkdir tracking
 # Copy all files
 COPY . tracking/
 RUN chown -R pyuser tracking
+
+# changing user
+USER pyuser
 
 # Install pip requirements
 RUN python -m pip install -r requirements.txt
