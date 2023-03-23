@@ -37,11 +37,9 @@
             text-align: left;
           }
 
-          thead {
-            th {
+          thead th {
               background-color: #55608f;
             }
-          }
 
           tbody {
             tr {
@@ -80,7 +78,7 @@
               </tr>
             </thead>
             <tbody>
-            {% for key, value in result.items() %}
+            {% for key, value in result['complete_list'].items() %}
              <tr>
                  <!-- <td> {{ key }} </td> -->
                  {% for k, v in value.items() %}

@@ -22,7 +22,11 @@ def get_dr_report():
 	print("Done fetch")
 	jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
 	global sandbox_model_arns
-	sandbox_model_arns = jPMCModels.all_model_arns
+	sandbox_model_arns['complete_list'] = jPMCModels.all_model_arns
+	jPMCModels.filter_imported_models()
+	jPMCModels.filter_stopped_models()
+	sandbox_model_arns['imported_models'] = jPMCModels.imported_models
+	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
 
 # running the report as background process
 get_dr_report()

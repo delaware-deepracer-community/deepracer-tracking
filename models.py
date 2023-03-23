@@ -167,7 +167,7 @@ class JPMCModels:
                 
     def filter_stopped_models(self):
         """
-        This mothod is to filter the models that were stopped by automation
+        This mothod is to filter the models that were stopped by automation.
         """
         
         for k, v in self.all_model_arns.items():
@@ -178,20 +178,30 @@ class JPMCModels:
                             start_time = datetime.datetime.strptime(v['start_time'], '%Y-%m-%d %H:%M:%S.%f')
                             end_time = datetime.datetime.strptime(v['end_time'], '%Y-%m-%d %H:%M:%S.%f')
                             run_time = end_time - start_time
-                            print(int(run_time.total_seconds()/60))
-                            print(k)
+                            
                             if settings.DURATION_THRESHOLD > int(run_time.total_seconds()/60):
                                 self.stopped_models.append(k)
+                                
+    def filter_imported_models(self):
+        """
+        This mothod is to filter the models that were imported.
+        """
+        
+        for k, v in self.all_model_arns.items():
+            if 'end_time' not in v:
+                self.imported_models.append(k)
 
-jPMCModels = JPMCModels()
-jPMCModels.get_all_models()
-jPMCModels.get_all_model_arns()
-# print(jPMCModels.all_model_arns)
+# jPMCModels = JPMCModels()
+# jPMCModels.get_all_models()
+# jPMCModels.get_all_model_arns()
+# # print(jPMCModels.all_model_arns)
 
-jPMCModels.get_all_model_training_details_concurrent()
-print("Filtering")
-jPMCModels.filter_stopped_models()
-print(jPMCModels.stopped_models)
+# jPMCModels.get_all_model_training_details_concurrent()
+# print("Filtering")
+# jPMCModels.filter_stopped_models()
+# print(jPMCModels.stopped_models)
+# jPMCModels.filter_imported_models()
+# print(jPMCModels.imported_models)
 # jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
 # # print(jPMCModels.all_model_arns)
 # print(jPMCModels.models_by_duration if jPMCModels.models_by_duration != set() else False)
