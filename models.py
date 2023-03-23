@@ -22,6 +22,8 @@ class JPMCModels:
         self.total_count = 0
         self.all_model_arns = {}
         self.models_by_duration = {}
+        self.stopped_models = []
+        self.imported_models = []
 
     def get_model_and_count(self, NextToken=''):
         """
@@ -70,15 +72,17 @@ class JPMCModels:
                             if 'CreationTime' in training_details['TrainingJobs'][0]['ActivityJob'] else ''
             start_time = str(datetime.datetime.fromtimestamp(training_details['TrainingJobs'][0]['ActivityJob']['StartTime']/1000)) \
                             if 'StartTime' in training_details['TrainingJobs'][0]['ActivityJob'] else ''
+            end_time = str(datetime.datetime.fromtimestamp(training_details['TrainingJobs'][0]['ActivityJob']['EndTime']/1000)) \
+                            if 'EndTime' in training_details['TrainingJobs'][0]['ActivityJob'] else ''
             training_status = training_details['TrainingJobs'][0]['ActivityJob']['Status']['JobStatus'] \
                             if 'JobStatus' in training_details['TrainingJobs'][0]['ActivityJob']['Status'] else ''
             max_training_time = training_details['TrainingJobs'][0]['Config']['TerminationConditions']['MaxTimeInMinutes'] \
                             if 'MaxTimeInMinutes' in training_details['TrainingJobs'][0]['Config']['TerminationConditions'] else ''
-
             # updating the global variable for arns
             if self.all_model_arns != {}:
                 self.all_model_arns[arn]['creation_time'] = creation_time
                 self.all_model_arns[arn]['start_time'] = start_time
+                self.all_model_arns[arn]['end_time'] = end_time
                 self.all_model_arns[arn]['training_status'] = training_status
                 self.all_model_arns[arn]['max_training_time'] = max_training_time
             else:
@@ -160,19 +164,40 @@ class JPMCModels:
 
             if elapsed_time > settings.DURATION_THRESHOLD:
                 self.stop_training_job(arn)
+                
+    def filter_stopped_models(self):
+        """
+        This mothod is to filter the models that were stopped by automation
+        """
+        
+        for k, v in self.all_model_arns.items():
+            if 'end_time' in v:
+                if 'max_training_time' in v:
+                    if v['max_training_time'] > settings.DURATION_THRESHOLD:
+                        if v['training_status'] == 'COMPLETED':
+                            start_time = datetime.datetime.strptime(v['start_time'], '%Y-%m-%d %H:%M:%S.%f')
+                            end_time = datetime.datetime.strptime(v['end_time'], '%Y-%m-%d %H:%M:%S.%f')
+                            run_time = end_time - start_time
+                            print(int(run_time.total_seconds()/60))
+                            print(k)
+                            if settings.DURATION_THRESHOLD > int(run_time.total_seconds()/60):
+                                self.stopped_models.append(k)
 
-# jPMCModels = JPMCModels()
-# jPMCModels.get_all_models()
-# jPMCModels.get_all_model_arns()
-# # print(jPMCModels.all_model_arns)
+jPMCModels = JPMCModels()
+jPMCModels.get_all_models()
+jPMCModels.get_all_model_arns()
+# print(jPMCModels.all_model_arns)
 
-# jPMCModels.get_all_model_training_details_concurrent()
-# print("Filtering")
+jPMCModels.get_all_model_training_details_concurrent()
+print("Filtering")
+jPMCModels.filter_stopped_models()
+print(jPMCModels.stopped_models)
 # jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
 # # print(jPMCModels.all_model_arns)
 # print(jPMCModels.models_by_duration if jPMCModels.models_by_duration != set() else False)
 
 # creation_time, start_time, training_status, max_training_time = jPMCModels.get_training_details('arn:aws:deepracer:us-east-1:158809224514:model/reinforcement_learning/760d4f7f-435f-4187-9ebf-236633c1dc03')
+# creation_time, start_time, training_status, max_training_time = jPMCModels.get_training_details('arn:aws:deepracer:us-east-1:158809224514:model/reinforcement_learning/12f3046e-cc8d-447c-a4d5-2040fc467ffd')
 # print(f'Creation Time is: {creation_time}, Start time is: {start_time}, Training status is: {training_status}, Max Time is: {max_training_time}')
 
 # jPMCModels.delete_model('arn:aws:deepracer:us-east-1:158809224514:model/reinforcement_learning/3a3cf3a3-ec76-4d44-84c9-e9adfa5412eb')
