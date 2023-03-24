@@ -175,8 +175,8 @@ class JPMCModels:
                 if 'max_training_time' in v:
                     if v['max_training_time'] > settings.DURATION_THRESHOLD:
                         if v['training_status'] == 'COMPLETED':
-                            start_time = datetime.datetime.strptime(v['start_time'], '%Y-%m-%d %H:%M:%S.%f')
-                            end_time = datetime.datetime.strptime(v['end_time'], '%Y-%m-%d %H:%M:%S.%f')
+                            start_time = datetime.datetime.strptime(v['start_time'].split('.')[0], '%Y-%m-%d %H:%M:%S.%f')
+                            end_time = datetime.datetime.strptime(v['end_time'].split('.')[0], '%Y-%m-%d %H:%M:%S.%f')
                             run_time = end_time - start_time
                             
                             if settings.DURATION_THRESHOLD > int(run_time.total_seconds()/60):
