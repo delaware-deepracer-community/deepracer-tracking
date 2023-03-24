@@ -27,6 +27,7 @@ def get_dr_report():
 	jPMCModels.filter_stopped_models()
 	sandbox_model_arns['imported_models'] = jPMCModels.imported_models
 	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
+	sandbox_model_arns['title'] = settings.GOOGLE_DDNS.split('.')[0]
 
 # running the report as background process
 get_dr_report()
