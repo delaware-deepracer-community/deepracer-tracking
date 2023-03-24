@@ -188,8 +188,9 @@ class JPMCModels:
         """
         
         for k, v in self.all_model_arns.items():
-            if 'end_time' not in v:
-                self.imported_models.append(k)
+            if 'end_time' in v:
+                if v['end_time'] == '':
+                    self.imported_models.append(k)
 
 # jPMCModels = JPMCModels()
 # jPMCModels.get_all_models()

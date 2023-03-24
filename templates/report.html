@@ -13,6 +13,10 @@
             font-weight: 100;
           }
 
+          tbody {
+            vertical-align: top;
+          }
+
           .container {
             position: absolute;
             top: 50%;
@@ -25,71 +29,122 @@
             border-collapse: collapse;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+          }
 
-            & th, & td {
-              padding: 15px;
-              background-color: rgba(255,255,255,0.2);
-              color: #fff;
-            }
+          div, table.modelDisplay th, table.modelDisplay td{
+            padding: 15px;
+            background-color: rgba(255,255,255,0.2);
+            color: #fff;
+          }
 
-            & th {
-              text-align: left;
-            }
+          table.modelDisplay th {
+            text-align: left;
+          }
 
-            & thead {
-              & th {
-                background-color: #55608f;
-              }
-            }
+          table.modelDisplay thead th{
+              background-color: #55608f;
+          }
 
-            & tbody {
-              & tr {
-                &:hover {
-                  background-color: rgba(255,255,255,0.3);
-                }
-              }
-              & td {
-                position: relative;
-                &:hover {
-                  &:before {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: -9999px;
-                    bottom: -9999px;
-                    background-color: rgba(255,255,255,0.2);
-                    z-index: -1;
-                  }
-                }
-              }
-            }
+          table.modelDisplay tbody tr:hover{
+            background-color: rgba(255,255,255,0.3);
+          }
+          table.modelDisplay tbody td {
+            position: relative;
+          }
+          table.modelDisplay tbody td:hover:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -9999px;
+            bottom: -9999px;
+            background-color: rgba(255,255,255,0.2);
+            z-index: -1;
           }
           
         </style>
     </head>
     <body>
-        <table class="modelDisplay">
-            <thead>
-              <tr>
-                <th>Model Name</th>
-                <th>Creation Time</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Status</th>
-                <th>Max Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for key, value in result['complete_list'].items() %}
-             <tr>
-                 <!-- <td> {{ key }} </td> -->
-                 {% for k, v in value.items() %}
-                    <td> {{ v }} </td>
-                 {% endfor %}
-             </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+      <table>
+        <tr>
+          <td>
+            <div>All Models</div>
+            <table class="modelDisplay">
+              <thead>
+                <tr>
+                  <th>Model Name</th>
+                  <th>Creation Time</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Status</th>
+                  <th>Max Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key, value in result['complete_list'].items() %}
+                <tr>
+                    <!-- <td> {{ key }} </td> -->
+                    {% for k, v in value.items() %}
+                      <td> {{ v }} </td>
+                    {% endfor %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <div>Stopped Models</div>
+            <table class="modelDisplay">
+              <thead>
+                <tr>
+                  <th>Model Name</th>
+                  <th>Creation Time</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Status</th>
+                  <th>Max Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key, value in result['complete_list'].items() %}
+              {% if key in result['stopped_models'] %}
+                <tr>
+                    <!-- <td> {{ key }} </td> -->
+                    {% for k, v in value.items() %}
+                      <td> {{ v }} </td>
+                    {% endfor %}
+                </tr>
+              {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+            <div>Imported Models</div>
+            <table class="modelDisplay">
+              <thead>
+                <tr>
+                  <th>Model Name</th>
+                  <th>Creation Time</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Status</th>
+                  <th>Max Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key, value in result['complete_list'].items() %}
+              {% if key in result['imported_models'] %}
+                <tr>
+                    <!-- <td> {{ key }} </td> -->
+                    {% for k, v in value.items() %}
+                      <td> {{ v }} </td>
+                    {% endfor %}
+                </tr>
+              {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </table>
     </body>
 </html>
