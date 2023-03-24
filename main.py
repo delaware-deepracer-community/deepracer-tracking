@@ -27,7 +27,6 @@ def get_dr_report():
 	jPMCModels.filter_stopped_models()
 	sandbox_model_arns['imported_models'] = jPMCModels.imported_models
 	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
-	sandbox_model_arns['title'] = settings.GOOGLE_DDNS.split('.')[0]
 
 # running the report as background process
 get_dr_report()
@@ -49,7 +48,7 @@ def hello_world():
 def get_report():
 	global sandbox_model_arns
 	# print(sandbox_model_arns)
-	return render_template('report.html', result=sandbox_model_arns)
+	return render_template('report.html', result=sandbox_model_arns, title=settings.GOOGLE_DDNS.split('.')[0])
 
 # main driver function
 if __name__ == '__main__':

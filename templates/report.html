@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{% result['title'] %}</title>
+        <title>{{ title }}</title>
         <style>
           html, body {
             height: 100%;
@@ -68,7 +68,7 @@
       <table>
         <tr>
           <td>
-            <div>All Models</div>
+            <div>{{ title }} - All Models</div>
             <table class="modelDisplay">
               <thead>
                 <tr>
@@ -93,7 +93,7 @@
             </table>
           </td>
           <td>
-            <div>Stopped Models</div>
+            <div>{{ title }} Stopped Models</div>
             <table class="modelDisplay">
               <thead>
                 <tr>
@@ -118,7 +118,7 @@
               {% endfor %}
               </tbody>
             </table>
-            <div>Imported Models</div>
+            <div>{{ title }} Imported Models</div>
             <table class="modelDisplay">
               <thead>
                 <tr>
