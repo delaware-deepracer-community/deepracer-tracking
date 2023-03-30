@@ -24,6 +24,7 @@ class JPMCModels:
         self.models_by_duration = {}
         self.stopped_models = []
         self.imported_models = []
+        print(f"Threshold is {settings.DURATION_THRESHOLD}")
 
     def get_model_and_count(self, NextToken=''):
         """
