@@ -29,6 +29,7 @@ def get_dr_report():
 	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
 
 # running the report as background process
+print("Before executing the report")
 get_dr_report()
 schedule = BackgroundScheduler(daemon=False)
 schedule.add_job(get_dr_report, 'interval', seconds=900)
