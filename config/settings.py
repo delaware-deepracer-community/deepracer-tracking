@@ -1,5 +1,5 @@
-import logging
-from deepracer import boto3_enhancer
+# import logging
+# from deepracer import boto3_enhancer
 import os
 
 DURATION_THRESHOLD = 180

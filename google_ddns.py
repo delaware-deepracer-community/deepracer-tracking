@@ -12,6 +12,7 @@ def update_ddns():
     # define google username & password for DDNS service
     myUname = settings.GOOGLE_DDNS_UNAME
     myPasswd = settings.GOOGLE_DDNS_PWD
+    print(f"Printing from google ddns py: {myUname}")
 
     # define your subdomain to update
     myDomain = settings.GOOGLE_DDNS
