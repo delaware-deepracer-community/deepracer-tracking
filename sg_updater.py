@@ -18,7 +18,7 @@ def sgupdate():
     if ingress_count == 0:
         print("Updating Ingress")
         client.authorize_security_group_ingress(
-                GroupId="sg-fd0fe6a9",
+                GroupId=sg_id,
                 IpPermissions=[
                     {"FromPort": 0,
                      "IpProtocol": "tcp",
@@ -31,7 +31,7 @@ def sgupdate():
     if egress_count == 0:
         print("Updating Egress")
         client.authorize_security_group_egress(
-                GroupId="sg-fd0fe6a9",
+                GroupId=sg_id,
                 IpPermissions=[
                     {"FromPort": 0,
                      "IpProtocol": "tcp",
