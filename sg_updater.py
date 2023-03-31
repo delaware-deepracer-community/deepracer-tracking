@@ -24,7 +24,7 @@ def sgupdate():
                      "IpProtocol": "tcp",
                      "PrefixListIds":
                         [
-                             {"PrefixListId": "pl-07468ccd58445d68a"}
+                             {"PrefixListId": pl_id}
                         ],"ToPort": 65535
                     }
                 ])
@@ -37,7 +37,7 @@ def sgupdate():
                      "IpProtocol": "tcp",
                      "PrefixListIds":
                         [
-                             {"PrefixListId": "pl-07468ccd58445d68a"}
+                             {"PrefixListId": pl_id}
                         ],"ToPort": 65535
                     }
                 ])
