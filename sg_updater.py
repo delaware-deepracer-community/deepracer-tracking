@@ -7,7 +7,7 @@ def sgupdate():
     ingress_count = 0
     egress_count = 0
     
-    client = boto3.client('ec2')
+    client = boto3.client('ec2', region_name='us-east-1')
     sg_rules = client.describe_security_group_rules(Filters=[{"Name": "group-id", "Values": [sg_id]}])
     for rule in sg_rules['SecurityGroupRules']:
         if rule['IsEgress']:
