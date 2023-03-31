@@ -32,7 +32,7 @@ def get_dr_report():
 # setting up schedule to update security group
 sg_updater.sgupdate()
 sg_schedule = BackgroundScheduler(daemon=False)
-sg_schedule.add_job(sg_updater.sgupdate(), 'interval', seconds=600)
+sg_schedule.add_job(sg_updater.sgupdate, 'interval', seconds=600)
 sg_schedule.start()
 
 # running the report as background process
