@@ -5,6 +5,7 @@ from models import JPMCModels
 from config import settings
 from apscheduler.schedulers.background import BackgroundScheduler
 import google_ddns
+import sg_updater
 
 
 # Flask constructor takes the name of
@@ -27,6 +28,12 @@ def get_dr_report():
 	jPMCModels.filter_stopped_models()
 	sandbox_model_arns['imported_models'] = jPMCModels.imported_models
 	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
+
+# setting up schedule to update security group
+sg_updater.sgupdate()
+sg_schedule = BackgroundScheduler(daemon=False)
+sg_schedule.add_job(sg_updater.sgupdate(), 'interval', seconds=600)
+sg_schedule.start()
 
 # running the report as background process
 get_dr_report()
