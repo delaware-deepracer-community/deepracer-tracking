@@ -14,20 +14,23 @@ app = Flask(__name__)
 
 sandbox_model_arns = {}
 def get_dr_report():
-	jPMCModels = JPMCModels()
-	jPMCModels.get_all_models()
-	jPMCModels.get_all_model_arns()
-	# print(jPMCModels.all_model_arns)
+	try:
+		jPMCModels = JPMCModels()
+		jPMCModels.get_all_models()
+		jPMCModels.get_all_model_arns()
+		# print(jPMCModels.all_model_arns)
 
-	jPMCModels.get_all_model_training_details_concurrent()
-	print("Done fetch")
-	jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
-	global sandbox_model_arns
-	sandbox_model_arns['complete_list'] = jPMCModels.all_model_arns
-	jPMCModels.filter_imported_models()
-	jPMCModels.filter_stopped_models()
-	sandbox_model_arns['imported_models'] = jPMCModels.imported_models
-	sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
+		jPMCModels.get_all_model_training_details_concurrent()
+		print("Done fetch")
+		jPMCModels.filter_running_models_by_duration(settings.DURATION_THRESHOLD)
+		global sandbox_model_arns
+		sandbox_model_arns['complete_list'] = jPMCModels.all_model_arns
+		jPMCModels.filter_imported_models()
+		jPMCModels.filter_stopped_models()
+		sandbox_model_arns['imported_models'] = jPMCModels.imported_models
+		sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
+	except Exception as ex:
+		print(ex)
 
 # setting up schedule to update security group
 sg_updater.sgupdate()
