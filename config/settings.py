@@ -2,7 +2,7 @@
 # from deepracer import boto3_enhancer
 import os
 
-DURATION_THRESHOLD = 180
+DURATION_THRESHOLD = 1
 
 GOOGLE_DDNS = os.getenv('GOOGLE_DDNS')
 GOOGLE_DDNS_UNAME = os.getenv('GOOGLE_DDNS_UNAME')
