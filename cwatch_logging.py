@@ -28,7 +28,3 @@ class CWatch_logging:
                 },
             ]
         )
-        
-testLog = CWatch_logging()
-for i in range(100):
-    testLog.send_log(f'This is test message from python class {i}')

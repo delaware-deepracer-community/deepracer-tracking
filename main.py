@@ -6,6 +6,8 @@ from config import settings
 from apscheduler.schedulers.background import BackgroundScheduler
 import google_ddns
 import sg_updater
+from cwatch_logging import CWatch_logging as cwl
+import traceback
 
 
 # Flask constructor takes the name of
@@ -13,7 +15,10 @@ import sg_updater
 app = Flask(__name__)
 
 sandbox_model_arns = {}
+cwlog = cwl()
+
 def get_dr_report():
+	cwlog.send_log('DR: Fetching DR Console model report')
 	try:
 		jPMCModels = JPMCModels()
 		jPMCModels.get_all_models()
@@ -31,11 +36,13 @@ def get_dr_report():
 		sandbox_model_arns['stopped_models'] = jPMCModels.stopped_models
 	except Exception as ex:
 		print(ex)
+		cwlog.send_log(f'Main: Encountered exception: {ex}')
+		cwlog.send_log(f'Main: Exception Stacktrace: {traceback.extract_stack()}')
 
 # setting up schedule to update security group
 sg_updater.sgupdate()
 sg_schedule = BackgroundScheduler(daemon=False)
-sg_schedule.add_job(sg_updater.sgupdate, 'interval', seconds=600)
+sg_schedule.add_job(sg_updater.sgupdate, 'interval', seconds=60)
 sg_schedule.start()
 
 # running the report as background process

@@ -1,9 +1,9 @@
 from deepracer import boto3_enhancer
 import datetime
 import concurrent.futures
-import copy
-import logging
 from config import settings
+from cwatch_logging import CWatch_logging as cwl
+import traceback
 
 
 class JPMCModels:
@@ -24,6 +24,7 @@ class JPMCModels:
         self.models_by_duration = {}
         self.stopped_models = []
         self.imported_models = []
+        self.cwlog = cwl()
 
     def get_model_and_count(self, NextToken=''):
         """
@@ -46,12 +47,13 @@ class JPMCModels:
 
         while True:
             model_count, self.next_token = self.get_model_and_count(self.next_token)
-            print(model_count)
+            # print(model_count)
             self.total_count = self.total_count + model_count
             if model_count < 100:
                 break
         # print(self.all_models[0])
         # print(self.total_count)
+        self.cwlog.send_log(f"DR-Models: Model being stopped: {self.total_count}")
 
     def get_all_model_training_details(self, all_arns=[]) -> None:
         """
@@ -88,7 +90,9 @@ class JPMCModels:
             else:
                 return creation_time, start_time, training_status, max_training_time
         except Exception as ex:
-            print(ex)
+            # print(ex)
+            self.cwlog.send_log(f'DR-Models: Encountered exception: {ex}')
+            self.cwlog.send_log(f'DR-Models: Exception Stacktrace: {traceback.extract_stack()}')
             return ()
     
     def get_all_model_training_details_concurrent(self) -> None:
@@ -112,7 +116,9 @@ class JPMCModels:
         try:
             self.all_model_arns = {x['ModelArn']: {'ModelName': x['ModelName']} for x in self.all_models}
         except Exception as ex:
-            print(ex)
+            # print(ex)
+            self.cwlog.send_log(f'DR-Models: Encountered exception: {ex}')
+            self.cwlog.send_log(f'DR-Models: Exception Stacktrace: {traceback.extract_stack()}')
 
     def delete_model(self, arn):
         """
@@ -120,8 +126,11 @@ class JPMCModels:
         """
         try:
             print(self.deepracer_client.delete_model(ModelArn=arn))
+            self.cwlog.send_log(f'DR-Models: Deleting Model: {arn}')
         except Exception as ex:
-            print(ex)
+            # print(ex)
+            self.cwlog.send_log(f'DR-Models: Encountered exception: {ex}')
+            self.cwlog.send_log(f'DR-Models: Exception Stacktrace: {traceback.extract_stack()}')
 
     def stop_training_job(self, arn):
         """
@@ -131,7 +140,9 @@ class JPMCModels:
         try:
             self.deepracer_client.stop_training_reinforcement_learning_model(ModelArn=arn)
         except Exception as ex:
-            print(ex)
+            # print(ex)
+            self.cwlog.send_log(f'DR-Models: Encountered exception: {ex}')
+            self.cwlog.send_log(f'DR-Models: Exception Stacktrace: {traceback.extract_stack()}')
 
     def filter_running_models_by_duration(self, duration):
         """
@@ -148,10 +159,13 @@ class JPMCModels:
                                 
             if self.models_by_duration != {}:
                 for k, v in self.models_by_duration.items():
-                    print(f"Model being stopped: {v['ModelName']}")
+                    # print(f"Model being stopped: {v['ModelName']}")
+                    self.cwlog.send_log(f"DR-Models: Model being stopped: {v['ModelName']}")
                     self.stop_training_job(k)
         except Exception as ex:
-            print(ex)    
+            # print(ex)
+            self.cwlog.send_log(f'DR-Models: Encountered exception: {ex}')
+            self.cwlog.send_log(f'DR-Models: Exception Stacktrace: {traceback.extract_stack()}')
     
     def stop_models_crossing_duration(self):
         """
