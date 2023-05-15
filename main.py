@@ -40,10 +40,10 @@ def get_dr_report():
 		cwlog.send_log(f'Main: Exception Stacktrace: {traceback.extract_stack()}')
 
 # setting up schedule to update security group
-sg_updater.sgupdate()
-sg_schedule = BackgroundScheduler(daemon=False)
-sg_schedule.add_job(sg_updater.sgupdate, 'interval', seconds=60)
-sg_schedule.start()
+# sg_updater.sgupdate()
+# sg_schedule = BackgroundScheduler(daemon=False)
+# sg_schedule.add_job(sg_updater.sgupdate, 'interval', seconds=60)
+# sg_schedule.start()
 
 # running the report as background process
 get_dr_report()
