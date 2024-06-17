@@ -3,7 +3,7 @@
 import os
 import boto3
 
-DURATION_THRESHOLD = 5
+DURATION_THRESHOLD = 2
 
 GOOGLE_DDNS = os.getenv('GOOGLE_DDNS')
 GOOGLE_DDNS_UNAME = os.getenv('GOOGLE_DDNS_UNAME')
