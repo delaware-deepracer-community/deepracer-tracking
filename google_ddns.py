@@ -111,7 +111,7 @@ def update_ddns():
         cf_url = f'{settings.CF_BASE_URL}/{settings.CF_ZONE_ID}/dns_records'
         headers = {
             'X-Auth-Email': settings.CF_EMAIL,
-            'X-Auth-Key': settings.CF_KEY,
+            'X-Auth-Key': settings.CF_API_KEY,
             'Content-Type': 'application/json',
         }
 
