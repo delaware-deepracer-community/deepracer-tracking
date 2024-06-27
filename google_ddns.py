@@ -4,9 +4,11 @@ import urllib.parse
 import http.client
 import base64
 import socket
+import requests
 from config import settings
+import pandas as pd
 
-def update_ddns():
+def update_ddns1():
     #------------------------------
     # all the user specific var
     # define google username & password for DDNS service
@@ -79,5 +81,49 @@ def update_ddns():
 
         else:
             print("Current DNS shows your IP " + extIP4 + " no need to bother Google DNS")
+    except Exception as ex:
+        print(ex)
+
+def update_ddns():
+    #------------------------------
+    # all the user specific var
+    # define google username & password for DDNS service
+    myUname = settings.GOOGLE_DDNS_UNAME
+    myPasswd = settings.GOOGLE_DDNS_PWD
+    
+
+    # define your subdomain to update
+    myDomain = settings.GOOGLE_DDNS
+
+    #------------------------------
+    # Determine our current external IPs
+    # use https://domains.google.com/checkip http server to obtain public IP, Google will return IPv6 so
+    # other good server is http://ip.42.pl/raw which returns IPv4
+    try:
+        url4 = 'https://ip.42.pl/raw'
+        req4 = requests.get(url4, verify=False)
+        extIP4 = req4.text
+
+        #print IPs to console for troubleshooting
+        print (extIP4)
+
+        # get zone dns records
+        cf_url = f'{settings.CF_URL}/{settings.CF_ZONE}/dns_records'
+        headers = {
+            'X-Auth-Email': settings.CF_EMAIL,
+            'X-Auth-Key': settings.CF_KEY,
+            'Content-Type': 'application/json',
+        }
+
+        cf_record = requests.get(cf_url, headers=headers)
+        cf_record_df = pd.DataFrame(cf_record.json()['result'])
+        
+        record_id = cf_record_df[cf_record_df['name'].str.contains(myDomain)].iloc[0]['id']
+        
+        # update dns record
+        cf_update_url = f'{settings.CF_URL}/{settings.CF_ZONE}/dns_records/{record_id}'
+        cf_update = requests.put(cf_update_url, headers=headers, json={'type': 'A', 'name': myDomain, 'content': extIP4, 'ttl': 3600, 'proxied': True})
+        print(cf_update.text)
+
     except Exception as ex:
         print(ex)
