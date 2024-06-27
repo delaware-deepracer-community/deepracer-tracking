@@ -108,7 +108,7 @@ def update_ddns():
         print (extIP4)
 
         # get zone dns records
-        cf_url = f'{settings.CF_URL}/{settings.CF_ZONE}/dns_records'
+        cf_url = f'{settings.CF_BASE_URL}/{settings.CF_ZONE_ID}/dns_records'
         headers = {
             'X-Auth-Email': settings.CF_EMAIL,
             'X-Auth-Key': settings.CF_KEY,
@@ -121,7 +121,7 @@ def update_ddns():
         record_id = cf_record_df[cf_record_df['name'].str.contains(myDomain)].iloc[0]['id']
         
         # update dns record
-        cf_update_url = f'{settings.CF_URL}/{settings.CF_ZONE}/dns_records/{record_id}'
+        cf_update_url = f'{cf_url}/{record_id}'
         cf_update = requests.put(cf_update_url, headers=headers, json={'type': 'A', 'name': myDomain, 'content': extIP4, 'ttl': 3600, 'proxied': True})
         print(cf_update.text)
 
