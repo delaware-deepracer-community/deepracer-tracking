@@ -1,5 +1,5 @@
-# boto3==1.26.74
-# deepracer-utils==1.0.3
+boto3
+deepracer-utils
 Flask
 requests
 apscheduler

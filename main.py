@@ -52,10 +52,10 @@ schedule.add_job(get_dr_report, 'interval', seconds=900)
 schedule.start()
 
 # setting up schedule to update google ddns
-google_ddns.update_ddns()
-ddns_schedule = BackgroundScheduler(daemon=False)
-ddns_schedule.add_job(google_ddns.update_ddns, 'interval', seconds=300)
-ddns_schedule.start()
+# google_ddns.update_ddns()
+# ddns_schedule = BackgroundScheduler(daemon=False)
+# ddns_schedule.add_job(google_ddns.update_ddns, 'interval', seconds=300)
+# ddns_schedule.start()
 
 @app.route('/')
 def hello_world():
